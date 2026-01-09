@@ -14,6 +14,7 @@
 #include "march_c_test.h"
 #include "march_lr_test.h"
 #include "checkerboard_test.h"
+#include "mats_plus_plus_test.h"
 
 #include "stuck_at_zero.h"
 #include "stuck_at_one.h"
@@ -137,6 +138,7 @@ TestAlgorithm* MainWindow::getTestAlgorithm() const
         case 0: return new MarchC();
         case 1: return new MarchLR();
         case 2: return new CheckerboardTest();
+        case 3: return new MATSPlusPlus();
         default: return new MarchC();
     }
 }

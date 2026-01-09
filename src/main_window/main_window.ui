@@ -67,6 +67,11 @@
           <string>Checkerboard Test</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>MATS++</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item row="1" column="1">
