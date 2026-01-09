@@ -21,5 +21,5 @@ add_subdirectory(src/algorithms)
 add_subdirectory(src/core)
 add_subdirectory(src/widget_details)
 
-add_executable(digitaltwin src/main.cpp)
-target_link_libraries(digitaltwin PRIVATE main_window)
+add_executable(DigitalTwin src/main.cpp)
+target_link_libraries(DigitalTwin PRIVATE main_window)

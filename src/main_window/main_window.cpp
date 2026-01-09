@@ -11,15 +11,19 @@
 #include "memory.h"
 #include "faulty_memory.h"
 
+#include "checkerboard_test.h"
+#include "lrand_test.h"
+#include "march_a_test.h"
+#include "march_b_test.h"
 #include "march_c_test.h"
 #include "march_lr_test.h"
-#include "checkerboard_test.h"
 #include "mats_plus_plus_test.h"
 
 #include "stuck_at_zero.h"
 #include "stuck_at_one.h"
 #include "bit_flip_phy.h"
 #include "bit_flip_logic.h"
+#include "rnd_stuck_at.h"
 
 #define TOTAL_CELLS 262144  // 32КБ = 32768 Б = 262144 б
 
@@ -125,6 +129,7 @@ FaultModel* MainWindow::getFaultModel(std::set<size_t> &faultyAddresses) const
         case 1: return new StuckAtOne(faultyAddresses);
         case 2: return new BitFlipPhy(faultyAddresses);
         case 3: return new BitFlipLogical(faultyAddresses);
+        case 4: return new RndStuckAt(faultyAddresses);
         default: return new StuckAtZero(faultyAddresses);
     }
 }
@@ -135,11 +140,15 @@ TestAlgorithm* MainWindow::getTestAlgorithm() const
 
     switch (index)
     {
-        case 0: return new MarchC();
-        case 1: return new MarchLR();
-        case 2: return new CheckerboardTest();
-        case 3: return new MATSPlusPlus();
-        default: return new MarchC();
+        case 0: return new MATSPlusPlus();
+        case 1: return new MarchA();
+        case 2: return new MarchB();
+        case 3: return new MarchC();
+        case 4: return new MarchLR();
+        case 5: return new CheckerboardTest();
+        case 6: return new LRANDTest();
+
+        default: return new MATSPlusPlus();
     }
 }
 
@@ -148,18 +157,6 @@ void MainWindow::onStartButtonClicked()
     std::set<size_t> faultyAddresses = generateRandomAddresses(ui->lineEditRndSelect->text().toInt());
     faultyAddresses.merge(parseMemorySelection(ui->lineEditSelect->text()));
 
-    if (faultyAddresses.size() > 10000)
-    {
-        int answer = QMessageBox::question(this, "Подтверждение",
-                                           QString("Выбрано %1 адресов. Тестирование может занять много времени.\nПродолжить?")
-                                               .arg(faultyAddresses.size()),
-                                           QMessageBox::Yes | QMessageBox::No);
-
-        if (answer != QMessageBox::Yes)
-        {
-            return;
-        }
-    }
     auto faultModel = std::shared_ptr<FaultModel>(getFaultModel(faultyAddresses));
     auto testAlgorithm = std::shared_ptr<TestAlgorithm>(getTestAlgorithm());
     auto faultyMemory = std::make_shared<FaultyMemory>(memory, faultModel.get());

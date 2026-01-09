@@ -18,7 +18,7 @@
     <item>
      <widget class="QLabel" name="labelRam">
       <property name="text">
-       <string>Количество ячеек памяти: 262 144</string>
+       <string>Количество ячеек памяти: 262 144 </string>
       </property>
      </widget>
     </item>
@@ -37,13 +37,6 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="labelDefect">
-        <property name="text">
-         <string>Модель неисправностей</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1">
        <widget class="QComboBox" name="comboBoxAlgorithm">
         <property name="sizePolicy">
@@ -54,12 +47,27 @@
         </property>
         <item>
          <property name="text">
-          <string>MarchC Test</string>
+          <string>MATS++</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>MarchLR Test</string>
+          <string>MarchA </string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>MarchB </string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>MarchC </string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>MarchLR </string>
          </property>
         </item>
         <item>
@@ -69,9 +77,16 @@
         </item>
         <item>
          <property name="text">
-          <string>MATS++</string>
+          <string>LRAND </string>
          </property>
         </item>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="labelDefect">
+        <property name="text">
+         <string>Модель неисправностей</string>
+        </property>
        </widget>
       </item>
       <item row="1" column="1">
@@ -100,6 +115,11 @@
         <item>
          <property name="text">
           <string>Bit-flip logical(write)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Rnd-Stuck-At</string>
          </property>
         </item>
        </widget>
