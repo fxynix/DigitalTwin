@@ -5,7 +5,8 @@
 
 class FaultyMemory;
 
-class TestAlgorithm : public QObject {
+class TestAlgorithm : public QObject
+{
     Q_OBJECT
 
 public:

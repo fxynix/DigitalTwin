@@ -5,7 +5,8 @@
 
 namespace Ui { class WidgetDetails; }
 
-class WidgetDetails : public QWidget {
+class WidgetDetails : public QWidget
+{
     Q_OBJECT
 
 public:

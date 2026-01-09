@@ -11,7 +11,8 @@ class Memory;
 class FaultModel;
 class TestAlgorithm;
 
-class MainWindow : public QMainWindow {
+class MainWindow : public QMainWindow
+{
     Q_OBJECT
 
 public:

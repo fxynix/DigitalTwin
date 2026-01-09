@@ -4,14 +4,17 @@
 
 FaultyMemory::FaultyMemory(Memory *m, FaultModel *f) : mem(m), fault(f) {}
 
-void FaultyMemory::write(size_t addr, uint8_t value) {
+void FaultyMemory::write(size_t addr, uint8_t value)
+{
     fault->write(mem, addr, value);
 }
 
-uint8_t FaultyMemory::read(size_t addr) const {
+uint8_t FaultyMemory::read(size_t addr) const
+{
     return fault->read(mem, addr);
 }
 
-size_t FaultyMemory::size() const {
+size_t FaultyMemory::size() const
+{
     return mem->size();
 }

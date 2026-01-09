@@ -3,6 +3,9 @@ add_library(fault_models STATIC
     stuck_at_zero.h
     stuck_at_zero.cpp
     stuck_at_one.h stuck_at_one.cpp
+    bit_flip_phy.h bit_flip_phy.cpp
+    bit_flip_logic.h bit_flip_logic.cpp
+
 )
 
 target_link_libraries(fault_models PRIVATE

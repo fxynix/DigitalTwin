@@ -1,15 +1,15 @@
-#ifndef STUCK_AT_ONE_H
-#define STUCK_AT_ONE_H
+#ifndef BIT_FLIP_LOGIC_H
+#define BIT_FLIP_LOGIC_H
 
 #include <set>
 #include "fault_model.h"
 
 class Memory;
 
-class StuckAtOne : public FaultModel
+class BitFlipLogical : public FaultModel
 {
 public:
-    StuckAtOne(const std::set<size_t> &faultyAddresses);
+    BitFlipLogical(const std::set<size_t> &faultyAddresses);
 
     void write(Memory *mem, size_t addr, uint8_t value) override;
     uint8_t read(Memory *mem, size_t addr) const override;
@@ -17,5 +17,4 @@ public:
 private:
     std::set<size_t> faultyAddresses;
 };
-
-#endif // STUCK_AT_ONE_H
+#endif // BIT_FLIP_LOGIC_H

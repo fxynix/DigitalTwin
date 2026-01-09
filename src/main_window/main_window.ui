@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>409</width>
-    <height>220</height>
+    <height>232</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -54,7 +54,17 @@
         </property>
         <item>
          <property name="text">
-          <string>Write 0 / Read / Write 1 / Read</string>
+          <string>MarchC Test</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>MarchLR Test</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Checkerboard Test</string>
          </property>
         </item>
        </widget>
@@ -77,34 +87,46 @@
           <string>Stuck-at-1</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>Bit-flip physical(read)</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Bit-flip logical(write)</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="labelRndSelect">
+        <property name="text">
+         <string>Количество неисправностей</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="lineEditRndSelect">
+        <property name="toolTip">
+         <string>Число случайных неповторяющихся ячеек, в которых будет выбранная неисправность</string>
+        </property>
+        <property name="placeholderText">
+         <string>22</string>
+        </property>
        </widget>
       </item>
       <item row="3" column="0">
-       <widget class="QLabel" name="labelRndSelect">
-        <property name="text">
-         <string>Количество неисправностей
-в случайных ячейках</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="1">
-       <widget class="QLineEdit" name="lineEditRndSelect">
-        <property name="placeholderText">
-         <string>16</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
        <widget class="QLabel" name="labelSelect">
         <property name="text">
          <string>Места неисправностей</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
+      <item row="3" column="1">
        <widget class="QLineEdit" name="lineEditSelect">
         <property name="toolTip">
-         <string>Введите числа и диапазоны через запятую. Например: 5,5-10,27,25-11</string>
+         <string>Введите числа и диапазоны через запятую для ячеек, в которых точно будет выбранная неисправность. Например: 5,5-10,27,25-11</string>
         </property>
         <property name="placeholderText">
          <string>5,5-10,27,25-11</string>
@@ -153,7 +175,7 @@
       <item>
        <widget class="QPushButton" name="pushButtonStart">
         <property name="enabled">
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="text">
          <string>Запустить</string>

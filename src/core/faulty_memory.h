@@ -7,7 +7,8 @@
 class Memory;
 class FaultModel;
 
-class FaultyMemory {
+class FaultyMemory
+{
 public:
     FaultyMemory(Memory *m, FaultModel *f);
 

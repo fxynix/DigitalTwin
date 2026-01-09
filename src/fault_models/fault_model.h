@@ -6,7 +6,8 @@
 
 class Memory;
 
-class FaultModel {
+class FaultModel
+{
 public:
     virtual void write(Memory *mem, size_t addr, uint8_t value) = 0;
     virtual uint8_t read(Memory *mem, size_t addr) const = 0;

@@ -4,7 +4,8 @@
 #include <vector>
 #include <cstdint>
 
-class Memory {
+class Memory
+{
 public:
     explicit Memory(size_t size);
 

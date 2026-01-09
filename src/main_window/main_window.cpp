@@ -11,15 +11,19 @@
 #include "memory.h"
 #include "faulty_memory.h"
 
-#include "simple_test.h"
+#include "march_c_test.h"
+#include "march_lr_test.h"
+#include "checkerboard_test.h"
 
 #include "stuck_at_zero.h"
 #include "stuck_at_one.h"
-
+#include "bit_flip_phy.h"
+#include "bit_flip_logic.h"
 
 #define TOTAL_CELLS 262144  // 32КБ = 32768 Б = 262144 б
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
+{
     ui->setupUi(this);
 
     widgetDetails = new WidgetDetails(this);
@@ -40,31 +44,25 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     initConnections();
 }
 
-MainWindow::~MainWindow() {
+MainWindow::~MainWindow()
+{
     delete ui;
     delete memory;
 }
 
-void MainWindow::initConnections() {
+void MainWindow::initConnections()
+{
     connect(ui->pushButtonDetails, &QPushButton::clicked, widgetDetails, &WidgetDetails::show);
     connect(ui->pushButtonStart, &QPushButton::clicked, this, &MainWindow::onStartButtonClicked);
-
-    connect(ui->lineEditSelect, &QLineEdit::textChanged, this, [this](const QString &text) {
-        ui->pushButtonStart->setEnabled(!text.trimmed().isEmpty());
-    });
-
-    connect(ui->lineEditRndSelect, &QLineEdit::textChanged, this, [this](const QString &text) {
-        ui->pushButtonStart->setEnabled(!text.trimmed().isEmpty());
-    });
 }
 
-std::set<size_t> MainWindow::generateRandomAddresses(int count) const {
+std::set<size_t> MainWindow::generateRandomAddresses(int count) const
+{
     std::set<size_t> result;
 
     if (count <= 0) return result;
     if (count > TOTAL_CELLS) count = TOTAL_CELLS;
 
-    // Используем std::random_device для получения случайного seed
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<size_t> dist(0, TOTAL_CELLS - 1);
@@ -76,13 +74,16 @@ std::set<size_t> MainWindow::generateRandomAddresses(int count) const {
     return result;
 }
 
-std::set<size_t> MainWindow::parseMemorySelection(const QString &text) const {
+std::set<size_t> MainWindow::parseMemorySelection(const QString &text) const
+{
     std::set<size_t> result;
 
     QStringList parts = text.split(',', Qt::SkipEmptyParts);
 
-    for (const QString &part : parts) {
-        if (part.contains('-')) {
+    for (const QString &part : parts)
+    {
+        if (part.contains('-'))
+        {
             QStringList range = part.split('-');
 
             bool ok1, ok2;
@@ -93,12 +94,17 @@ std::set<size_t> MainWindow::parseMemorySelection(const QString &text) const {
             if (start >= TOTAL_CELLS) start = TOTAL_CELLS - 1;
             if (end >= TOTAL_CELLS) end = TOTAL_CELLS - 1;
 
-            if (start <= end) {
+            if (start <= end)
+            {
                 for (size_t i = start; i <= end; i++) result.insert(i);
-            } else {
+            }
+            else
+            {
                 for (size_t i = start; i >= end; i--) result.insert(i);
             }
-        } else {
+        }
+        else
+        {
             bool ok;
             size_t val = part.toULong(&ok);
             if (ok && val < TOTAL_CELLS) result.insert(val);
@@ -108,36 +114,47 @@ std::set<size_t> MainWindow::parseMemorySelection(const QString &text) const {
     return result;
 }
 
-FaultModel* MainWindow::getFaultModel(std::set<size_t> &faultyAddresses) const {
+FaultModel* MainWindow::getFaultModel(std::set<size_t> &faultyAddresses) const
+{
     int index = ui->comboBoxDefect->currentIndex();
 
-    switch (index) {
+    switch (index)
+    {
         case 0: return new StuckAtZero(faultyAddresses);
         case 1: return new StuckAtOne(faultyAddresses);
+        case 2: return new BitFlipPhy(faultyAddresses);
+        case 3: return new BitFlipLogical(faultyAddresses);
         default: return new StuckAtZero(faultyAddresses);
     }
 }
 
-TestAlgorithm* MainWindow::getTestAlgorithm() const {
+TestAlgorithm* MainWindow::getTestAlgorithm() const
+{
     int index = ui->comboBoxAlgorithm->currentIndex();
 
-    switch (index) {
-        case 0: return new SimpleTest();
-        default: return new SimpleTest();
+    switch (index)
+    {
+        case 0: return new MarchC();
+        case 1: return new MarchLR();
+        case 2: return new CheckerboardTest();
+        default: return new MarchC();
     }
 }
 
-void MainWindow::onStartButtonClicked() {
+void MainWindow::onStartButtonClicked()
+{
     std::set<size_t> faultyAddresses = generateRandomAddresses(ui->lineEditRndSelect->text().toInt());
     faultyAddresses.merge(parseMemorySelection(ui->lineEditSelect->text()));
 
-    if (faultyAddresses.size() > 10000) {
+    if (faultyAddresses.size() > 10000)
+    {
         int answer = QMessageBox::question(this, "Подтверждение",
                                            QString("Выбрано %1 адресов. Тестирование может занять много времени.\nПродолжить?")
                                                .arg(faultyAddresses.size()),
                                            QMessageBox::Yes | QMessageBox::No);
 
-        if (answer != QMessageBox::Yes) {
+        if (answer != QMessageBox::Yes)
+        {
             return;
         }
     }
@@ -157,27 +174,33 @@ void MainWindow::onStartButtonClicked() {
         Qt::QueuedConnection
     );
 
-    QThreadPool::globalInstance()->start([this, faultModel, testAlgorithm, faultyMemory]() {
+    QThreadPool::globalInstance()->start([this, faultModel, testAlgorithm, faultyMemory]()
+    {
         int errorCount = testAlgorithm->run(faultyMemory.get());
 
-        QMetaObject::invokeMethod(this, [this, errorCount]() {
+        QMetaObject::invokeMethod(this, [this, errorCount]()
+        {
             ui->lineEditSelect->setEnabled(true);
             ui->progressBar->setEnabled(false);
 
-            if (errorCount != 0) {
+            if (errorCount != 0)
+            {
                 QMessageBox::critical(
                     this,
                     "Результат тестирования",
                     QString("Ошибок обнаружено: %1\nДетали в подробностях")
                         .arg(errorCount)
                 );
-            } else {
+            }
+            else
+            {
                 QMessageBox::information(
                     this,
                     "Результат тестирования",
                     "Ошибок не обнаружено\nДетали в подробностях"
                 );
             }
+            ui->pushButtonStart->setEnabled(1);
         });
     });
 }
